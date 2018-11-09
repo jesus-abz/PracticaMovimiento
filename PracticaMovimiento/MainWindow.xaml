@@ -6,17 +6,25 @@
         xmlns:local="clr-namespace:PracticaMovimiento"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Canvas Name="miCanvas" KeyDown="miCanvas_KeyDown" Focusable="True">
-        <Image Name="imgWaluigi" Source="Waluigi.png" Canvas.Left="366" Canvas.Top="280" Height="111" Width="61"></Image>
-        <Image Name="imgAT" Source="AT.png" Width="87" Canvas.Left="663" Canvas.Top="149" RenderTransformOrigin="0.5,0.5" Height="87">
-            <Image.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="270.122"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Image.RenderTransform>
-        </Image>
+    <Canvas>
+        <Canvas Visibility="Visible" Name="miCanvas" KeyDown="miCanvas_KeyDown" Focusable="True">
+            <Image Name="imgWaluigi" Source="Waluigi.png" Canvas.Left="366" Canvas.Top="280" Height="111" Width="61"></Image>
+            <Image Name="imgAT" Source="AT.png" Width="87" Canvas.Left="663" Canvas.Top="149" RenderTransformOrigin="0.5,0.5" Height="87">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="270.122"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <TextBlock x:Name="lblInterseccionX" Canvas.Left="10" TextWrapping="Wrap" Text="No hay intersección en X" Canvas.Top="10"/>
+            <TextBlock x:Name="lblInterseccionY" Canvas.Left="10" TextWrapping="Wrap" Text="No hay intersección en Y" Canvas.Top="31"/>
+            <TextBlock x:Name="lblColision" Canvas.Left="10" TextWrapping="Wrap" Text="No hay colisión" Canvas.Top="52"/>
+        </Canvas>
+        <Canvas Name="canvasGameOver" Visibility="Collapsed">
+            <TextBlock Text="Game Over" Canvas.Left="224" Canvas.Top="154" Height="105" Width="370" FontSize="72" Foreground="#FFCF0C0C" />
+        </Canvas>
     </Canvas>
 </Window>
