@@ -30,6 +30,11 @@ namespace PracticaMovimiento
         enum EstadoJuego { GamePlay, GameOver};
         EstadoJuego estadoJuego = EstadoJuego.GamePlay;
 
+        enum Direccion { Arriba, Abajo, Izquierda, Derecha, Ninguna };
+        Direccion direccionJugador = Direccion.Ninguna;
+
+        double velocidadWaluigi = 60;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -47,6 +52,46 @@ namespace PracticaMovimiento
             threadMoverDeconfirm.Start();
         }
 
+        void moverJugador(TimeSpan deltaTime)
+        {
+            double topWaluigiActual = Canvas.GetTop(imgWaluigi);
+            double leftWaluigiActual = Canvas.GetLeft(imgWaluigi);
+
+            switch (direccionJugador)
+            {
+                case Direccion.Arriba:
+                    if (topWaluigiActual - (velocidadWaluigi * deltaTime.TotalSeconds) >= 0)
+                    {
+                        Canvas.SetTop(imgWaluigi, topWaluigiActual - (velocidadWaluigi * deltaTime.TotalSeconds));
+                    }
+                    break;
+                case Direccion.Abajo:
+                    double nuevaPosicionY = topWaluigiActual + (velocidadWaluigi * deltaTime.TotalSeconds);
+                    if (nuevaPosicionY + imgWaluigi.Width <= 450)
+                    {
+                        Canvas.SetTop(imgWaluigi, topWaluigiActual + (velocidadWaluigi * deltaTime.TotalSeconds));
+                    }
+                    break;
+                case Direccion.Izquierda:
+                    if (leftWaluigiActual - (velocidadWaluigi * deltaTime.TotalSeconds) >= 0)
+                    {
+                        Canvas.SetLeft(imgWaluigi, leftWaluigiActual - (velocidadWaluigi * deltaTime.TotalSeconds));
+                    }
+                    break;
+                case Direccion.Derecha:
+                    double nuevaPosicionX = leftWaluigiActual + (velocidadWaluigi * deltaTime.TotalSeconds);
+                    if (nuevaPosicionX + imgWaluigi.Width <= 800)
+                    {
+                        Canvas.SetLeft(imgWaluigi, leftWaluigiActual + (velocidadWaluigi * deltaTime.TotalSeconds));
+                    }
+                    break;
+                case Direccion.Ninguna:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         void actualizar()
         {
             while (true)
@@ -57,12 +102,15 @@ namespace PracticaMovimiento
                     var tiempoActual = stopwatch.Elapsed;
                     var deltaTime = tiempoActual - tiempoAnterior;
 
+                    //velocidadWaluigi += 10 * deltaTime.TotalSeconds;
+
                     if (estadoJuego == EstadoJuego.GameOver)
                     {
 
                     }
                     else if (estadoJuego == EstadoJuego.GamePlay)
                     {
+                        moverJugador(deltaTime);
 
                         double leftATactual = Canvas.GetLeft(imgAT);
                         Canvas.SetLeft(imgAT, leftATactual - (20 * deltaTime.TotalSeconds));
@@ -124,30 +172,45 @@ namespace PracticaMovimiento
             {
                 if (e.Key == Key.Up)
                 {
-                    double topWaluigiActual = Canvas.GetTop(imgWaluigi);
-
-                    Canvas.SetTop(imgWaluigi, topWaluigiActual - 15);
+                    direccionJugador = Direccion.Arriba;
                 }
                 if (e.Key == Key.Down)
                 {
-                    double topWaluigiActual = Canvas.GetTop(imgWaluigi);
-
-                    Canvas.SetTop(imgWaluigi, topWaluigiActual + 15);
+                    direccionJugador = Direccion.Abajo;
                 }
                 if (e.Key == Key.Left)
                 {
-                    double topWaluigiActual = Canvas.GetLeft(imgWaluigi);
-
-                    Canvas.SetLeft(imgWaluigi, topWaluigiActual - 15);
+                    direccionJugador = Direccion.Izquierda;
                 }
                 if (e.Key == Key.Right)
                 {
-                    double topWaluigiActual = Canvas.GetLeft(imgWaluigi);
-
-                    Canvas.SetLeft(imgWaluigi, topWaluigiActual + 15);
+                    direccionJugador = Direccion.Derecha;
                 }
             }
             
+        }
+
+        private void miCanvas_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(estadoJuego == EstadoJuego.GamePlay)
+            {
+                if(e.Key == Key.Up && direccionJugador == Direccion.Arriba)
+                {
+                    direccionJugador = Direccion.Ninguna;
+                }
+                if (e.Key == Key.Down && direccionJugador == Direccion.Abajo)
+                {
+                    direccionJugador = Direccion.Ninguna;
+                }
+                if (e.Key == Key.Left && direccionJugador == Direccion.Izquierda)
+                {
+                    direccionJugador = Direccion.Ninguna;
+                }
+                if (e.Key == Key.Right && direccionJugador == Direccion.Derecha)
+                {
+                    direccionJugador = Direccion.Ninguna;
+                }
+            }
         }
     }
 }
